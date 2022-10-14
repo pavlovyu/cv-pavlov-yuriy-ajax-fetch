@@ -2,10 +2,12 @@
 
 const postUrl = 'https://ajax.test-danit.com/api/json/posts';
 const userUrl = 'https://ajax.test-danit.com/api/json/users';
+const pageBody = document.querySelector('body');
 const pageRoot = document.querySelector("#root");
 const cardForm = document.createElement('div');
 cardForm.classList.add('page-card');
 pageRoot.append(cardForm);
+const pageBtn = document.querySelector('.btn');
 
 class Card {
     constructor (userUrl, postUrl, pageRoot) {
@@ -13,6 +15,7 @@ class Card {
         this.postUrl = postUrl;
         this.pageRoot = pageRoot;
     };
+
     requestUser() {
         return fetch(this.userUrl)
             .then((request) => {
@@ -44,7 +47,6 @@ class Card {
                                         <p class="page-userName">User name: ${user.name}</p>
                                         <p class="page-userEmail">email: ${user.email}</p>
                                     </div>`);
-
                             const cardButton = document.querySelector('.cardClose');
                             cardButton.addEventListener('click',(e) => {
                                 fetch('https://ajax.test-danit.com/api/json/posts/${postId}')
@@ -61,4 +63,9 @@ class Card {
         };
     };
 
-const someCard = new Card(userUrl, postUrl, pageRoot).requestUser();
+    pageBtn.addEventListener("click", (e) => {
+        const someCard = new Card(userUrl, postUrl, pageRoot).requestUser();
+        pageBtn.classList.toggle('btn-none');
+        pageBody.insertAdjacentHTML('afterbegin', 
+        `<p class="about-cardClose">Click the button \"close\" to delete a post.</p>`);
+    });
